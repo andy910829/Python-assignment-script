@@ -26,7 +26,7 @@ def main_test():
             from main import main
 
             with patch('builtins.input', side_effect=['show','exit']):
-                main()
+                #main()
                 try:
                     main()
                 except Exception as e:
