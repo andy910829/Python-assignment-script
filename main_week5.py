@@ -27,37 +27,37 @@ def main_test():
 
             inputs = ['show','exit']
             expected_output = """add: Add a student's name and score
-    del: Delete a student
-    modify: Modify a student's score
-    show: Print all
-    exit: Exit
+del: Delete a student
+modify: Modify a student's score
+show: Print all
+exit: Exit
 
-    ==== student list ====
+==== student list ====
 
-    ======================
+======================
 
-    add: Add a student's name and score
-    del: Delete a student
-    modify: Modify a student's score
-    show: Print all
-    exit: Exit
-    'exit'
-    """  # 输入预期输出结果
+add: Add a student's name and score
+del: Delete a student
+modify: Modify a student's score
+show: Print all
+exit: Exit
+'exit'
+    """.strip()  # 输入预期输出结果
 
             with patch('builtins.input', side_effect=inputs):
                 with patch('sys.stdout', new_callable=StringIO) as mock_stdout:
                     main()
-                actual_output = mock_stdout.getvalue().replace('\n', '').strip()
-                print(actual_output)
-                print('-'*50)
-                print(expected_output)
-                assert actual_output == expected_output.replace('\n', '').strip(), f"Test failed in {test_file}"
+                actual_output = mock_stdout.getvalue().strip()
+                assert actual_output == expected_output, f"Test failed in {test_file}"
                 
             print()
             print("---------------------------------------------------------------------------------------------------")
         except Exception as e:
-            with open('error.txt', 'w') as f:
-                f.write(f'Error in {test_file} : {e}') 
+            print(actual_output)
+            print('-'*50)
+            print(expected_output)
+            with open('error.txt', 'a') as f:
+                f.write(f'Error in {test_file} : {e}\n') 
         
         
 
