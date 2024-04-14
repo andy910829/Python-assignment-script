@@ -2,9 +2,9 @@ import os
 import sys
 from unittest.mock import patch
 from io import StringIO
+import pickle
 
-
-def main_test():
+def main():
     week = 'week05'
     folder_path = "python作業評分/week5_copy"
     for test_file in os.listdir(folder_path):
@@ -16,17 +16,18 @@ def main_test():
         elif os.path.exists(f'{folder_path}/{test_file}/to_student'):
             path = f'{folder_path}/{test_file}/to_student'
         sys.path.insert(0, path)
+        with open("student_dict.db", "wb") as fp:
+            pickle.dump({}, fp)
         try:
-            if os.path.exists(f'{path}/student_dict.db'):    
-                os.remove(f'{path}/student_dict.db')
-            elif os.path.exists(f'{path}/student_dict'):
-                os.remove(f'{path}/student_dict')
-            with open(f'{path}/student_dict.db', 'w') as f:
-                f.write('')
-            from main import main
+            test(test_file=test_file,path=path)
+        except Exception as e:
+            with open('error.txt', 'a') as f:
+                f.write(f'Error in {test_file} : {e}\n') 
 
-            inputs = ['show','exit']
-            expected_output = """add: Add a student's name and score
+def test(test_file,path):
+    from main import main
+    inputs = ['show','exit']
+    expected_output = """add: Add a student's name and score
 del: Delete a student
 modify: Modify a student's score
 show: Print all
@@ -42,24 +43,18 @@ modify: Modify a student's score
 show: Print all
 exit: Exit
 'exit'
-    """.strip()  # 输入预期输出结果
-
-            with patch('builtins.input', side_effect=inputs):
-                with patch('sys.stdout', new_callable=StringIO) as mock_stdout:
-                    main()
-                actual_output = mock_stdout.getvalue().strip()
-                assert actual_output == expected_output, f"Test failed in {test_file}"
-                
-            print()
-            print("---------------------------------------------------------------------------------------------------")
-        except Exception as e:
-            print(actual_output)
-            print('-'*50)
-            print(expected_output)
-            with open('error.txt', 'a') as f:
-                f.write(f'Error in {test_file} : {e}\n') 
-        
-        
+""".strip()  # 输入预期输出结果
+    with patch('builtins.input', side_effect=inputs):
+        with patch('sys.stdout', new_callable=StringIO) as mock_stdout:
+                main()
+        actual_output = mock_stdout.getvalue().strip()
+    assert actual_output == expected_output, f"Test failed in {test_file} : {actual_output}"
+    print()
+    print("---------------------------------------------------------------------------------------------------")
+    
+    
 
 if __name__ == '__main__':
-    main_test()
+    main()
+
+
