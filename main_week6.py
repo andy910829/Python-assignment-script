@@ -5,17 +5,16 @@ import pickle
 import tempfile
 
 def main():
-    week = 'week05'
-    folder_path = "python作業評分/week5_copy"
+    folder_path = "python作業評分/week6_copy"
     for test_file in os.listdir(folder_path):
         if test_file == '.DS_Store':
             continue
-        print(f'{folder_path}/{test_file}/{week}')
-        if os.path.exists(f'{folder_path}/{test_file}/{week}'):
-            path = f'{folder_path}/{test_file}/{week}'
-        elif os.path.exists(f'{folder_path}/{test_file}/to_student'):
-            path = f'{folder_path}/{test_file}/to_student'
-        sys.path.insert(0, path)
+        test_file_path = os.path.join(folder_path, test_file)
+        files_in_test_file = os.listdir(test_file_path)
+        path = f'{folder_path}/{test_file}/{files_in_test_file[1]}'
+        sys.path.clear()
+        print(f'path: {path}')
+        sys.path.append(path)
         with open("student_dict.db", "wb") as fp:
             pickle.dump({}, fp)
         try:
