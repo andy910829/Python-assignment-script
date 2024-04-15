@@ -22,6 +22,7 @@ def main():
         test(path, test_file)
 
 def test(path, test_file):
+    error = f'{test_file} : passed\n-----------------------------------------\n'
     try:
         os.chdir(path)
         with open('/Users/laiguanhua/Desktop/python作業評分/standard_input.txt','r') as f:
@@ -36,12 +37,13 @@ def test(path, test_file):
         print()
         print("---------------------------------------------------------------------------------------------------")
     except AssertionError as e:
-        with open('/Users/laiguanhua/Desktop/python作業評分/error.txt', 'a') as f:
-            f.write(f'Error in {test_file} : {e}\n-----------------------------------------\n') 
+        error = f'Error in {test_file} : {e}\n-----------------------------------------\n'
     except Exception as e:
         print(e)
-        with open('/Users/laiguanhua/Desktop/python作業評分/error.txt', 'a') as f:
-            f.write(f'Error in {test_file} : {e}\n-----------------------------------------\n')
+        error = e
+    finally:
+        with open('/Users/laiguanhua/Desktop/python作業評分/week5_error.txt', 'a') as f:
+            f.write(error)
 def get_uncompressed_folder(files):
     for folder in files:
         if not folder.endswith('.rar')and not folder.endswith('.zip'):
